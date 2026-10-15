@@ -1,0 +1,47 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#376854"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png"><title>BelvaDeva V10.3.1 · Petualangan belajar</title><link rel="stylesheet" href="css/app.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head><body><header><a class="brand" href="#" id="brand"><span>b.d</span> BelvaDeva <small>V10.3.1</small></a><div class="header-actions"><button class="pill header-pill" id="sound" aria-pressed="true" aria-label="Aktifkan atau matikan suara">🔊 <span>Musik &amp; Suara</span></button><button class="pill header-pill" id="playerSwitch">👧 <span>Pemain</span></button><button class="pill header-pill parent-lock" id="parentOpen" aria-label="Buka mode orang tua">🔒 <span>Orang Tua</span></button></div></header><main id="app"><div id="audioStatus" class="audio-status" role="status"></div><section id="home"></section><section id="worlds" hidden></section><section id="wardrobe" hidden></section><section id="collection" hidden></section><section id="play" hidden></section><section id="parent" hidden></section><nav id="nav" aria-label="Menu utama"><button data-nav="home"><span class="nav-icon">🏡</span><span>Beranda</span></button><button data-nav="worlds"><span class="nav-icon">🎮</span><span>Main</span></button><button data-nav="collection"><span class="nav-icon">🎒</span><span>Koleksi</span></button></nav></main><dialog id="profileDialog" aria-labelledby="profileTitle">
+<div class="opening-decor" aria-hidden="true">
+  <span class="open-cloud c1"><span class="puff"></span><span class="shine"></span><span class="shadow"></span></span><span class="open-cloud c2"><span class="puff"></span><span class="shine"></span><span class="shadow"></span></span><span class="open-cloud c3"><span class="puff"></span><span class="shine"></span><span class="shadow"></span></span>
+  <span class="open-star s1">✦</span><span class="open-star s2">✦</span><span class="open-star s3">✧</span><span class="open-star s4">✦</span>
+  <span class="open-balloon b1">🎈</span><span class="open-balloon b2">🎈</span><span class="open-kite">🪁</span>
+  <span class="open-butterfly bf1">🦋</span><span class="open-butterfly bf2">🦋</span>
+  <span class="open-hill h1"></span><span class="open-hill h2"></span>
+</div>
+<div class="opening-content">
+  <div class="opening-kicker">✨ DUNIA BELVA &amp; DEVA ✨</div>
+  <h2 id="profileTitle">Siapa yang mau berpetualang?</h2>
+  <p class="opening-subtitle">Pilih karaktermu, pilih gayamu, lalu masuk ke dunia belajar yang seru 🌈</p>
+  <div id="profileList" class="profile-list opening-profile-list"></div>
+  <div class="opening-actions"><button class="pill" id="addPlayer">🔒 Tambah pemain</button><button class="pill" id="profileClose">Kembali</button></div>
+</div>
+</dialog><dialog id="gate" aria-labelledby="gateTitle"><form id="gateForm"><h2 id="gateTitle">Khusus Ayah & Bunda</h2><p class="gate-hold-note">1. Tahan tombol ini selama 3 detik.</p><button type="button" class="pill" id="gateHold">🔒 Tahan 3 detik</button><div class="gate-hold-progress" id="gateHoldProgress" aria-hidden="true"><span></span></div><label for="gateInput" id="gateQuestion">2. Jawab soal hitung.</label><input id="gateInput" inputmode="numeric" required autocomplete="off" disabled><p id="gateError" role="alert"></p><button class="primary" id="gateSubmit" disabled>Lanjut</button><button type="button" class="pill" id="gateCancel">Batal</button></form></dialog><dialog id="editProfile" aria-labelledby="editTitle"><form id="profileForm"><h2 id="editTitle">Tambah pemain</h2><label for="nameInput">Nama panggilan</label><input id="nameInput" maxlength="24" required autocomplete="given-name"><label for="buddyInput">Teman bermain</label><select id="buddyInput"><option value="belva">Belva</option><option value="deva">Deva</option></select><p id="profileError" role="alert"></p><button class="primary">Simpan</button><button type="button" class="pill" id="editCancel">Batal</button></form></dialog><dialog id="breakDialog"><h2>🌿 Mata kita juga mau istirahat</h2><p>Yuk, lihat sesuatu yang jauh dan bergerak sebentar bersama Ayah atau Bunda.</p><button class="primary" id="breakDone">Aku sudah istirahat</button></dialog><script src="js/data.js"></script><script src="js/profiles.js"></script><script src="js/storage.js"></script><script src="js/audio.js"></script>
+<script src="js/music.js"></script>
+<script src="js/rewards.js"></script><script src="js/game.js"></script><script src="js/app.js"></script><script src="js/pwa.js"></script></body></html>
