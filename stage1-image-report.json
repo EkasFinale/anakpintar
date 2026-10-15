@@ -1,0 +1,22 @@
+[
+  {
+    "source": "assets/images/img-c2d46acdbec1.png",
+    "before_bytes": 1880082,
+    "primary": "assets/images/family-3d2d.webp",
+    "after_bytes": 133110,
+    "fallback": "assets/images/family-3d2d.jpg",
+    "fallback_bytes": 249017,
+    "saved_bytes": 1746972,
+    "saved_percent": 92.9
+  },
+  {
+    "source": "assets/images/img-f40fc72de96a.jpg",
+    "before_bytes": 223789,
+    "primary": "assets/characters/*.webp",
+    "after_bytes_all_6": 112384,
+    "fallback": "assets/characters/*.jpg",
+    "fallback_bytes_all_6": 214310,
+    "saved_bytes_if_all_6_loaded": 111405,
+    "saved_percent_if_all_6_loaded": 49.8
+  }
+]

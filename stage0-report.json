@@ -1,0 +1,106 @@
+{
+  "source": "/mnt/data/BelvaDeva-Adaptive-Backsound-FingersConsistent.html",
+  "original_bytes": 3470408,
+  "asset_count": 8,
+  "assets": [
+    {
+      "file": "assets/images/img-c2d46acdbec1.png",
+      "bytes": 1880082,
+      "sha256_12": "c2d46acdbec1",
+      "mime": "png"
+    },
+    {
+      "file": "assets/images/img-f40fc72de96a.jpg",
+      "bytes": 223789,
+      "sha256_12": "f40fc72de96a",
+      "mime": "jpeg"
+    },
+    {
+      "file": "assets/images/img-68062c70af36.png",
+      "bytes": 29776,
+      "sha256_12": "68062c70af36",
+      "mime": "png"
+    },
+    {
+      "file": "assets/images/img-1e4c317a4fa1.png",
+      "bytes": 20801,
+      "sha256_12": "1e4c317a4fa1",
+      "mime": "png"
+    },
+    {
+      "file": "assets/images/img-3abd30a432f9.png",
+      "bytes": 24000,
+      "sha256_12": "3abd30a432f9",
+      "mime": "png"
+    },
+    {
+      "file": "assets/images/img-3f673666da8b.png",
+      "bytes": 25340,
+      "sha256_12": "3f673666da8b",
+      "mime": "png"
+    },
+    {
+      "file": "assets/images/img-ae471eefe87d.png",
+      "bytes": 27017,
+      "sha256_12": "ae471eefe87d",
+      "mime": "png"
+    },
+    {
+      "file": "assets/images/img-88f4f1faf8d2.png",
+      "bytes": 28973,
+      "sha256_12": "88f4f1faf8d2",
+      "mime": "png"
+    }
+  ],
+  "style_blocks": 11,
+  "css": [
+    "app.css"
+  ],
+  "scripts": [
+    "data.js",
+    "profiles.js",
+    "audio.js",
+    "music.js",
+    "rewards.js",
+    "game.js",
+    "app.js"
+  ],
+  "node_checks": [
+    {
+      "file": "data.js",
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "file": "profiles.js",
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "file": "audio.js",
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "file": "music.js",
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "file": "rewards.js",
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "file": "game.js",
+      "ok": true,
+      "stderr": ""
+    },
+    {
+      "file": "app.js",
+      "ok": true,
+      "stderr": ""
+    }
+  ],
+  "output_index_bytes": 4315
+}
