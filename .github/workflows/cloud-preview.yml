@@ -1,7 +1,5 @@
-name: Deploy BelvaDeva Cloud Preview
+name: Manual Cloud Preview (requires Pages approval)
 on:
-  push:
-    branches: [feature/cloud-save-foundation]
   workflow_dispatch:
 permissions:
   contents: read
