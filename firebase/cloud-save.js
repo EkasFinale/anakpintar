@@ -52,7 +52,8 @@ async function sync(){
    map.set(d.id,existing?merge(existing,incoming):incoming);
   }
   const list=[...map.values()];
-  P.mergeCloud(list);
+  window.__bdCloudImport=true;
+  try{P.mergeCloud(list)}finally{window.__bdCloudImport=false}
   for(const p of P.all())await setDoc(doc(base,p.id),{schemaVersion:1,name:p.name,buddy:p.buddy,profile:p,updatedAt:serverTimestamp()});
   status('Tersimpan di cloud ✓');
  }catch(e){status('Belum tersinkron · data lokal tetap aman');console.error(e)}
@@ -64,6 +65,6 @@ else {
  try{
   const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
   onAuthStateChanged(auth,u=>{user=u;status(u?'Akun terhubung':'Login diperlukan');if(u)sync()});
-  window.addEventListener('belvadeva:save',()=>{if(!user)return;clearTimeout(window.__bdSyncTimer);window.__bdSyncTimer=setTimeout(sync,2500)});
+  window.addEventListener('belvadeva:save',()=>{if(!user||window.__bdCloudImport)return;clearTimeout(window.__bdSyncTimer);window.__bdSyncTimer=setTimeout(sync,2500)});
  }catch(e){status('Konfigurasi Firebase tidak valid')}
 }
