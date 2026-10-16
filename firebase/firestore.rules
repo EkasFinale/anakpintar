@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    match /families/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && request.resource.data.keys().hasOnly(['schemaVersion','createdAt']) && request.resource.data.schemaVersion == 1;
+      allow update, delete: if false;
+      match /children/{childId} {
+        allow read, delete: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['schemaVersion','name','buddy','createdAt'])
+          && request.resource.data.schemaVersion == 1
+          && request.resource.data.name is string
+          && request.resource.data.name.size() <= 24
+          && request.resource.data.buddy in ['belva','deva'];
+        allow update: if isOwner(uid)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','buddy'])
+          && request.resource.data.name is string
+          && request.resource.data.name.size() <= 24
+          && request.resource.data.buddy in ['belva','deva'];
+        match /events/{eventId} {
+          allow read: if isOwner(uid);
+          allow create: if isOwner(uid)
+            && request.resource.data.keys().hasOnly(['schemaVersion','mission','type','createdAt','deviceId','payload'])
+            && request.resource.data.schemaVersion == 1
+            && request.resource.data.mission is int
+            && request.resource.data.mission >= 0
+            && request.resource.data.type in ['question_correct','mission_complete','session_end']
+            && request.resource.data.deviceId is string
+            && request.resource.data.deviceId.size() <= 100
+            && request.resource.data.payload is map
+            && request.resource.data.payload.keys().size() <= 15;
+          allow update, delete: if false;
+        }
+      }
+    }
+  }
+}
