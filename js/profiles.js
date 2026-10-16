@@ -56,7 +56,7 @@
     next.settings=normalizeSettings(raw.settings);
     return next;
   }
-  function save(){window.dispatchEvent(new Event('belvadeva:save'));try{store.version=SCHEMA_VERSION;store.schemaVersion=SCHEMA_VERSION;localStorage.setItem(KEY,JSON.stringify(store));warning=''}catch{warning='Progres belum tersimpan. Ekspor cadangan sebelum menutup permainan.'}}
+  function save(){try{store.version=SCHEMA_VERSION;store.schemaVersion=SCHEMA_VERSION;localStorage.setItem(KEY,JSON.stringify(store));warning='';window.dispatchEvent(new Event('belvadeva:save'))}catch{warning='Progres belum tersimpan. Ekspor cadangan sebelum menutup permainan.'}}
   function load(){
     try{
       const raw=JSON.parse(localStorage.getItem(KEY));const migrated=migrate(raw);
