@@ -1,6 +1,6 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-import {getFirestore,collection,doc,getDocs,setDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import {getFirestore,collection,doc,getDocs,runTransaction,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import {firebaseConfig} from './config.js';
 const P=window.BD?.Profiles;
 const configured=!!(firebaseConfig.apiKey&&firebaseConfig.projectId&&firebaseConfig.appId);
@@ -56,7 +56,20 @@ async function sync(){
   const list=[...map.values()];
   window.__bdCloudImport=true;
   try{P.mergeCloud(list)}finally{window.__bdCloudImport=false}
-  for(const p of P.all())await setDoc(doc(base,p.id),{schemaVersion:1,name:p.name,buddy:p.buddy,profile:p,updatedAt:serverTimestamp()});
+  // Transaction retries when another device changes the same child.
+  // The merged server snapshot is also imported back locally after commit.
+  for(const p of P.all()){
+   const ref=doc(base,p.id);
+   const committed=await runTransaction(db,async tx=>{
+    const snap=await tx.get(ref);
+    const existing=snap.exists()?snap.data().profile:null;
+    const final=existing&&existing.id===p.id?merge(p,existing):p;
+    tx.set(ref,{schemaVersion:1,name:final.name,buddy:final.buddy,profile:final,updatedAt:serverTimestamp()});
+    return final;
+   });
+   window.__bdCloudImport=true;
+   try{P.mergeCloud([committed])}finally{window.__bdCloudImport=false}
+  }
   status('Tersimpan di cloud ✓');
  }catch(e){status('Belum tersinkron · data lokal tetap aman');console.error(e)}
  finally{working=false;if(dirty){dirty=false;setTimeout(sync,1200)}}
