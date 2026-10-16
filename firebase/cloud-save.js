@@ -35,6 +35,7 @@ function merge(a,b){
  for(const [k,v] of Object.entries(remote.stars||{}))x.journey.stars[k]=Math.max(Number(v)||0,Number(x.journey.stars[k])||0);
  x.journey.badges=[...new Set([...(remote.badges||[]),...(x.journey.badges||[])])];
  x.journey.treasure=!!(remote.treasure||x.journey.treasure);
+ x.maxMission=Math.max(a.maxMission||1,b.maxMission||1);
  return x;
 }
 async function sync(){
@@ -44,10 +45,11 @@ async function sync(){
   const base=collection(db,'families',user.uid,'children');
   const remote=await getDocs(base);
   const local=P.all();
+  // Cloud import must never overwrite an active in-progress run.
   const map=new Map(local.map(p=>[p.id,p]));
   for(const d of remote.docs){
    const incoming=d.data().profile;
-   if(!incoming)continue;
+   if(!incoming||incoming.id!==d.id)continue;
    const existing=map.get(d.id);
    map.set(d.id,existing?merge(existing,incoming):incoming);
   }
