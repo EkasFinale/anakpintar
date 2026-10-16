@@ -56,7 +56,7 @@
     next.settings=normalizeSettings(raw.settings);
     return next;
   }
-  function save(){try{store.version=SCHEMA_VERSION;store.schemaVersion=SCHEMA_VERSION;localStorage.setItem(KEY,JSON.stringify(store));warning=''}catch{warning='Progres belum tersimpan. Ekspor cadangan sebelum menutup permainan.'}}
+  function save(){window.dispatchEvent(new Event('belvadeva:save'));try{store.version=SCHEMA_VERSION;store.schemaVersion=SCHEMA_VERSION;localStorage.setItem(KEY,JSON.stringify(store));warning=''}catch{warning='Progres belum tersimpan. Ekspor cadangan sebelum menutup permainan.'}}
   function load(){
     try{
       const raw=JSON.parse(localStorage.getItem(KEY));const migrated=migrate(raw);
@@ -75,6 +75,7 @@
   function exportData(){save();return JSON.stringify({format:'belvadeva-progress',version:SCHEMA_VERSION,schemaVersion:SCHEMA_VERSION,exportedAt:new Date().toISOString(),settings:store.settings,players:Object.values(store.players)},null,2)}
   function parseImport(text){const data=JSON.parse(text);if(data?.format!=='belvadeva-progress'||![9,10].includes(Number(data.version))||!Array.isArray(data.players)||data.players.length<1||data.players.length>100)throw Error('Gunakan cadangan BelvaDeva V9 atau V10.');const ids=new Set();return data.players.map(p=>{const v=valid(p);if(ids.has(v.id))throw Error('ID profil ganda');ids.add(v.id);return v})}
   function merge(list){for(const p of list){const same=Object.values(store.players).find(x=>x.name.toLowerCase()===p.name.toLowerCase());if(same&&!own(store.players,p.id))p.id=same.id;store.players[p.id]=p}save()}
+  function mergeCloud(list){for(const p of list){const validated=valid(p);store.players[validated.id]=validated}save()}
   function settings(){return {...store.settings}}
   function setSettings(patch){store.settings=normalizeSettings({...store.settings,...patch});save();return settings()}
   function markExported(){store.meta.lastExportAt=new Date().toISOString();save();return store.meta.lastExportAt}
@@ -82,5 +83,5 @@
   function backupDue(days=7){const last=lastExportAt();if(!last)return true;const age=Date.now()-new Date(last).getTime();return !Number.isFinite(age)||age>days*86400000}
 
   load();
-  B.Profiles={save,current,all:()=>Object.values(store.players),select,add,rename,nameOK,today,exportData,parseImport,merge,warning:()=>warning,settings,setSettings,markExported,lastExportAt,backupDue,schemaVersion:()=>SCHEMA_VERSION};
+  B.Profiles={save,current,all:()=>Object.values(store.players),select,add,rename,nameOK,today,exportData,parseImport,merge,mergeCloud,warning:()=>warning,settings,setSettings,markExported,lastExportAt,backupDue,schemaVersion:()=>SCHEMA_VERSION};
 })(BD);
