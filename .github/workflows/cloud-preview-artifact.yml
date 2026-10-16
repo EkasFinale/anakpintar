@@ -1,0 +1,37 @@
+name: Cloud Preview Artifact
+on:
+  push:
+    branches: [feature/cloud-save-foundation]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - name: Check JavaScript syntax
+        run: |
+          node --check js/profiles.js
+          node --check js/game.js
+          node --check firebase/cloud-save.js
+      - name: Upload standalone preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: belvadeva-cloud-preview
+          path: |
+            index.html
+            css/
+            js/
+            assets/
+            audio/
+            firebase/
+            sw.js
+            manifest.webmanifest
+          retention-days: 14

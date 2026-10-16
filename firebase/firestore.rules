@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  match /families/{uid}/children/{childId} {
+   function owner() { return request.auth != null && request.auth.uid == uid; }
+   allow read, delete: if owner();
+   allow create, update: if owner()
+     && request.resource.data.keys().hasOnly(['schemaVersion','name','buddy','profile','updatedAt'])
+     && request.resource.data.schemaVersion == 1
+     && request.resource.data.name is string
+     && request.resource.data.name.size() > 0
+     && request.resource.data.name.size() <= 24
+     && request.resource.data.buddy in ['belva','deva']
+     && request.resource.data.profile is map
+     && request.resource.data.profile.id == childId;
+  }
+ }
+}

@@ -19,9 +19,9 @@
       if(!B.Data.byId(key)||!value||typeof value!=='object')throw Error('Misi cadangan tidak valid');
       out.completions[key]={times:Math.max(1,Math.min(100000,Number(value.times)||1)),last:typeof value.last==='string'?value.last.slice(0,10):today()};
     }
-    out.events=(Array.isArray(p.events)?p.events:[]).slice(-5000).map(e=>{
+    out.events=(Array.isArray(p.events)?p.events:[]).slice(-5000).map((e,index)=>{
       if(!e||!B.Data.byId(e.mission)||typeof e.day!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(e.day)||!Number.isInteger(e.attempts)||e.attempts<0||e.attempts>100||!Number.isInteger(e.hints)||e.hints<0||e.hints>100)throw Error('Riwayat tidak valid');
-      return {day:e.day,mission:+e.mission,first:e.first===true,attempts:e.attempts,hints:e.hints};
+      return {id:typeof e.id==='string'&&/^[a-zA-Z0-9_-]{8,100}$/.test(e.id)?e.id:('legacy_'+[e.day,e.mission,e.first,e.attempts,e.hints,index].join('_')),day:e.day,mission:+e.mission,first:e.first===true,attempts:e.attempts,hints:e.hints};
     });
     out.sessions=(Array.isArray(p.sessions)?p.sessions:[]).slice(-2000).filter(e=>e&&/^\d{4}-\d{2}-\d{2}$/.test(e.day)&&Number.isFinite(e.seconds)&&e.seconds>=0&&e.seconds<86400).map(e=>({day:e.day,seconds:e.seconds}));
     out.review={};for(const [k,v] of Object.entries(p.review||{}).slice(0,1000))if(k.length<100&&Number.isInteger(v)&&v>=0&&v<10000&&!['__proto__','constructor','prototype'].includes(k))out.review[k]=v;
@@ -56,7 +56,7 @@
     next.settings=normalizeSettings(raw.settings);
     return next;
   }
-  function save(){try{store.version=SCHEMA_VERSION;store.schemaVersion=SCHEMA_VERSION;localStorage.setItem(KEY,JSON.stringify(store));warning=''}catch{warning='Progres belum tersimpan. Ekspor cadangan sebelum menutup permainan.'}}
+  function save(){try{store.version=SCHEMA_VERSION;store.schemaVersion=SCHEMA_VERSION;localStorage.setItem(KEY,JSON.stringify(store));warning='';window.dispatchEvent(new Event('belvadeva:save'))}catch{warning='Progres belum tersimpan. Ekspor cadangan sebelum menutup permainan.'}}
   function load(){
     try{
       const raw=JSON.parse(localStorage.getItem(KEY));const migrated=migrate(raw);
@@ -75,6 +75,7 @@
   function exportData(){save();return JSON.stringify({format:'belvadeva-progress',version:SCHEMA_VERSION,schemaVersion:SCHEMA_VERSION,exportedAt:new Date().toISOString(),settings:store.settings,players:Object.values(store.players)},null,2)}
   function parseImport(text){const data=JSON.parse(text);if(data?.format!=='belvadeva-progress'||![9,10].includes(Number(data.version))||!Array.isArray(data.players)||data.players.length<1||data.players.length>100)throw Error('Gunakan cadangan BelvaDeva V9 atau V10.');const ids=new Set();return data.players.map(p=>{const v=valid(p);if(ids.has(v.id))throw Error('ID profil ganda');ids.add(v.id);return v})}
   function merge(list){for(const p of list){const same=Object.values(store.players).find(x=>x.name.toLowerCase()===p.name.toLowerCase());if(same&&!own(store.players,p.id))p.id=same.id;store.players[p.id]=p}save()}
+  function mergeCloud(list){for(const p of list){const validated=valid(p);store.players[validated.id]=validated}save()}
   function settings(){return {...store.settings}}
   function setSettings(patch){store.settings=normalizeSettings({...store.settings,...patch});save();return settings()}
   function markExported(){store.meta.lastExportAt=new Date().toISOString();save();return store.meta.lastExportAt}
@@ -82,5 +83,5 @@
   function backupDue(days=7){const last=lastExportAt();if(!last)return true;const age=Date.now()-new Date(last).getTime();return !Number.isFinite(age)||age>days*86400000}
 
   load();
-  B.Profiles={save,current,all:()=>Object.values(store.players),select,add,rename,nameOK,today,exportData,parseImport,merge,warning:()=>warning,settings,setSettings,markExported,lastExportAt,backupDue,schemaVersion:()=>SCHEMA_VERSION};
+  B.Profiles={save,current,all:()=>Object.values(store.players),select,add,rename,nameOK,today,exportData,parseImport,merge,mergeCloud,warning:()=>warning,settings,setSettings,markExported,lastExportAt,backupDue,schemaVersion:()=>SCHEMA_VERSION};
 })(BD);
