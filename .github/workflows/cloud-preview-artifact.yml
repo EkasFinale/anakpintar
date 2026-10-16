@@ -2,6 +2,8 @@ name: Cloud Preview Artifact
 on:
   push:
     branches: [feature/cloud-save-foundation]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
