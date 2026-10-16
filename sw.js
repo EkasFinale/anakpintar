@@ -1,4 +1,4 @@
-const CACHE='belvadeva-v1031-fullupload';
+const CACHE='belvadeva-cloud-preview-v1';
 const PRECACHE=[
   "./",
   "./assets/characters/belva-antariksa.jpg",
@@ -36,6 +36,8 @@ const PRECACHE=[
   "./audio/catalog.json",
   "./css/app.css",
   "./index.html",
+  "./firebase/cloud-save.js",
+  "./firebase/config.js",
   "./js/app.js",
   "./js/audio.js",
   "./js/data.js",
